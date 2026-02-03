@@ -29,6 +29,7 @@ function init() {
     initCountdown();
     initNavigation();
     initFAQ();
+    initLightbox();
 
     // Only initialize RSVP functionality if we're on the RSVP page
     if (document.getElementById('rsvp-form')) {
@@ -183,6 +184,56 @@ function initFAQ() {
             }
         });
     });
+}
+
+// ================================
+// Photo Lightbox
+// ================================
+
+function initLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxClose = lightbox.querySelector('.lightbox-close');
+    const collageItems = document.querySelectorAll('.collage-item');
+
+    // Open lightbox when clicking on a photo
+    collageItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const img = item.querySelector('img');
+            if (img && img.src && !item.classList.contains('placeholder')) {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    // Close lightbox when clicking close button
+    lightboxClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeLightbox();
+    });
+
+    // Close lightbox when clicking outside the image
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Close lightbox with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 }
 
 // ================================
