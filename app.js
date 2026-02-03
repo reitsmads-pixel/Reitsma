@@ -3,35 +3,24 @@
  * Firebase Integration, Countdown, FAQ & Form Handling
  */
 
-// Firebase Configuration - injected at build time (encoded to bypass secret scanner)
-const firebaseConfig = {
-    apiKey: atob("__FIREBASE_API_KEY_B64__"),
-    authDomain: "__FIREBASE_AUTH_DOMAIN__",
-    projectId: "__FIREBASE_PROJECT_ID__",
-    storageBucket: "__FIREBASE_STORAGE_BUCKET__",
-    messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
-    appId: "__FIREBASE_APP_ID__"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
 // Wedding Date
 const WEDDING_DATE = new Date('2026-06-26T14:00:00');
 const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
 
-// DOM Elements
-const rsvpForm = document.getElementById('rsvp-form');
-const successMessage = document.getElementById('success-message');
-const declineMessage = document.getElementById('decline-message');
-const submitBtn = document.querySelector('.submit-btn');
-const btnText = document.querySelector('.btn-text');
-const btnLoading = document.querySelector('.btn-loading');
-const guestsGroup = document.getElementById('guests-group');
-const dietaryGroup = document.getElementById('dietary-group');
-const songSection = document.getElementById('song-section');
-const attendingRadios = document.querySelectorAll('input[name="attending"]');
+// Firebase (only initialized on RSVP page)
+let db = null;
+
+// DOM Elements (only set on RSVP page)
+let rsvpForm = null;
+let successMessage = null;
+let declineMessage = null;
+let submitBtn = null;
+let btnText = null;
+let btnLoading = null;
+let guestsGroup = null;
+let dietaryGroup = null;
+let songSection = null;
+let attendingRadios = null;
 
 /**
  * Initialize the application
@@ -40,6 +29,43 @@ function init() {
     initCountdown();
     initNavigation();
     initFAQ();
+
+    // Only initialize RSVP functionality if we're on the RSVP page
+    if (document.getElementById('rsvp-form')) {
+        initRSVP();
+    }
+}
+
+/**
+ * Initialize RSVP page functionality
+ */
+function initRSVP() {
+    // Firebase Configuration - injected at build time (encoded to bypass secret scanner)
+    const firebaseConfig = {
+        apiKey: atob("__FIREBASE_API_KEY_B64__"),
+        authDomain: "__FIREBASE_AUTH_DOMAIN__",
+        projectId: "__FIREBASE_PROJECT_ID__",
+        storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+        messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+        appId: "__FIREBASE_APP_ID__"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+
+    // Set DOM Elements
+    rsvpForm = document.getElementById('rsvp-form');
+    successMessage = document.getElementById('success-message');
+    declineMessage = document.getElementById('decline-message');
+    submitBtn = document.querySelector('.submit-btn');
+    btnText = document.querySelector('.btn-text');
+    btnLoading = document.querySelector('.btn-loading');
+    guestsGroup = document.getElementById('guests-group');
+    dietaryGroup = document.getElementById('dietary-group');
+    songSection = document.getElementById('song-section');
+    attendingRadios = document.querySelectorAll('input[name="attending"]');
+
     checkDeadline();
     setupEventListeners();
     setupAttendingToggle();
@@ -50,19 +76,29 @@ function init() {
 // ================================
 
 function initCountdown() {
+    // Only initialize if countdown elements exist (home page)
+    if (!document.getElementById('days')) return;
+
     updateCountdown();
     setInterval(updateCountdown, 1000);
 }
 
 function updateCountdown() {
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
     const now = new Date();
     const diff = WEDDING_DATE - now;
 
     if (diff <= 0) {
-        document.getElementById('days').textContent = '0';
-        document.getElementById('hours').textContent = '00';
-        document.getElementById('minutes').textContent = '00';
-        document.getElementById('seconds').textContent = '00';
+        daysEl.textContent = '0';
+        hoursEl.textContent = '00';
+        minutesEl.textContent = '00';
+        secondsEl.textContent = '00';
         return;
     }
 
@@ -71,10 +107,10 @@ function updateCountdown() {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    document.getElementById('days').textContent = days;
-    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    daysEl.textContent = days;
+    hoursEl.textContent = hours.toString().padStart(2, '0');
+    minutesEl.textContent = minutes.toString().padStart(2, '0');
+    secondsEl.textContent = seconds.toString().padStart(2, '0');
 }
 
 // ================================
@@ -382,7 +418,7 @@ function showSuccessMessage() {
     rsvpForm.style.display = 'none';
     successMessage.style.display = 'block';
     successMessage.classList.add('fade-in');
-    scrollToRSVP();
+    scrollToTop();
 }
 
 /**
@@ -392,14 +428,14 @@ function showDeclineMessage() {
     rsvpForm.style.display = 'none';
     declineMessage.style.display = 'block';
     declineMessage.classList.add('fade-in');
-    scrollToRSVP();
+    scrollToTop();
 }
 
 /**
- * Scroll to RSVP section
+ * Scroll to top of page (for success/decline messages)
  */
-function scrollToRSVP() {
-    document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Initialize when DOM is ready

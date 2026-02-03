@@ -6,57 +6,59 @@
     <title>Vian & Stefan - Wedding</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
-            <a href="#home" class="nav-logo">V & S</a>
+            <a href="index.html" class="nav-logo">V & S</a>
             <button class="nav-toggle" aria-label="Toggle navigation">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
             <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#our-story">Our Story</a></li>
-                <li><a href="#schedule">Schedule</a></li>
-                <li><a href="#venue">Venue</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#rsvp" class="nav-rsvp">RSVP</a></li>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="venue.html">Venue</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="rsvp.html" class="nav-rsvp">RSVP</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Hero Section -->
-        <header class="hero" id="home">
-            <p class="invitation-text">We're getting married</p>
-            <h1 class="names">
-                <span class="name">Vian</span>
-                <span class="and">&</span>
-                <span class="name">Stefan</span>
-            </h1>
+    <!-- Hero Section -->
+    <header class="hero">
+        <p class="invitation-text">We're getting married</p>
+        <h1 class="names">
+            <span class="name">Vian</span>
+            <span class="and">&</span>
+            <span class="name">Stefan</span>
+        </h1>
 
-            <!-- Event Details -->
-            <div class="details">
-                <div class="date-time">
-                    <span class="date">June 26, 2026</span>
-                    <span class="separator"></span>
-                    <span class="time">2:00 PM</span>
-                </div>
-                <address class="venue-address">
-                    <span class="venue-name">Almost Orange</span>
-                    <span>Altyd Mooi Farm, R513</span>
-                    <span>Hartbeespoort, 0216</span>
-                </address>
+        <!-- Event Details -->
+        <div class="details">
+            <div class="date-time">
+                <span class="date">June 26, 2026</span>
+                <span class="separator"></span>
+                <span class="time">2:00 PM</span>
             </div>
-        </header>
+            <address class="venue-address">
+                <span class="venue-name">Almost Orange</span>
+                <span>Altyd Mooi Farm, R513</span>
+                <span>Hartbeespoort, 0216</span>
+            </address>
+        </div>
 
-        <!-- Countdown Section -->
-        <section class="countdown-section" id="countdown">
+        <a href="rsvp.html" class="hero-cta">RSVP Now</a>
+    </header>
+
+    <!-- Countdown Section -->
+    <section class="countdown-section">
+        <div class="container">
             <h2 class="section-subtitle">Counting Down To Our Day</h2>
             <div class="countdown" id="countdown-timer">
                 <div class="countdown-item">
@@ -76,311 +78,80 @@
                     <span class="countdown-label">Seconds</span>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Our Story Section -->
-        <section class="story-section" id="our-story">
-            <h2 class="section-title">Our Story</h2>
-            <div class="story-content">
-                <div class="story-timeline">
-                    <div class="story-item">
-                        <div class="story-date">How We Met</div>
-                        <div class="story-text">
-                            <p>Our story began with a simple message and a week of non-stop chatting. When we finally met in person, Stefan discovered that Vian was far cuter than any photo could capture, while Vian couldn't stop looking at Stefan's smile and those blue eyes. But the moment we knew this was something special? That came later - spending Vian's birthday with his family, and realising just how natural it all felt. Like we'd always belonged.</p>
-                        </div>
-                    </div>
-                    <div class="story-item">
-                        <div class="story-date">First Date</div>
-                        <div class="story-text">
-                            <p>We met at Primi in Eastgate Mall, and from the moment we sat down, the conversation simply never stopped. Our pizza went cold because we were too busy talking to eat - and honestly, neither of us minded. It must have gone well, because Stefan went home and secretly messaged his future mother-in-law to arrange a surprise visit to Pretoria. The whole family played along, pretending an electrician had arrived to check on a power fault. Imagine Vian's face when Stefan walked through the front door - supposedly still more than 100km away.</p>
-                        </div>
-                    </div>
-                    <div class="story-item">
-                        <div class="story-date">The Proposal</div>
-                        <div class="story-text">
-                            <p>In December 2024, we travelled to the USA to visit our best friends, Carla and Marcel. In Park City, Utah, we wandered through the ski resort searching for the perfect snowy spot - even stumbling across the 2002 Winter Olympics museum along the way. Finally, we found a quiet public park blanketed in snow. With Carla and Marcel secretly capturing every moment, Stefan asked the question. Vian said yes. And then, because that's exactly who we are, the four of us celebrated with a snowball fight.</p>
-                        </div>
-                    </div>
+    <!-- Photo Collage Section -->
+    <section class="gallery-section">
+        <div class="container">
+            <h2 class="section-title">Our Moments</h2>
+            <p class="section-subtitle">A glimpse into our journey together</p>
+            <div class="photo-collage">
+                <!-- Row 1: 3 photos -->
+                <div class="collage-item collage-item-1">
+                    <img src="images/photo-1.jpg" alt="Vian and Stefan" onerror="this.parentElement.classList.add('placeholder')">
+                    <div class="collage-placeholder">Photo 1</div>
+                </div>
+                <div class="collage-item collage-item-2">
+                    <img src="images/photo-2.jpg" alt="Vian and Stefan" onerror="this.parentElement.classList.add('placeholder')">
+                    <div class="collage-placeholder">Photo 2</div>
+                </div>
+                <div class="collage-item collage-item-3">
+                    <img src="images/photo-3.jpg" alt="Vian and Stefan" onerror="this.parentElement.classList.add('placeholder')">
+                    <div class="collage-placeholder">Photo 3</div>
+                </div>
+                <!-- Row 2: 2 photos -->
+                <div class="collage-item collage-item-4">
+                    <img src="images/photo-4.jpg" alt="Vian and Stefan" onerror="this.parentElement.classList.add('placeholder')">
+                    <div class="collage-placeholder">Photo 4</div>
+                </div>
+                <div class="collage-item collage-item-5">
+                    <img src="images/photo-5.jpg" alt="Vian and Stefan" onerror="this.parentElement.classList.add('placeholder')">
+                    <div class="collage-placeholder">Photo 5</div>
+                </div>
+                <!-- Row 3: 3 photos -->
+                <div class="collage-item collage-item-6">
+                    <img src="images/photo-6.jpg" alt="Vian and Stefan" onerror="this.parentElement.classList.add('placeholder')">
+                    <div class="collage-placeholder">Photo 6</div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Schedule Section -->
-        <section class="schedule-section" id="schedule">
-            <h2 class="section-title">Wedding Day Schedule</h2>
-            <div class="schedule-timeline">
-                <div class="schedule-item">
-                    <div class="schedule-time">13:30</div>
-                    <div class="schedule-event">
-                        <h3>Guest Arrival</h3>
-                        <p>Please arrive and find your seats. Light refreshments will be served.</p>
-                    </div>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-time">14:00</div>
-                    <div class="schedule-event">
-                        <h3>Ceremony Begins</h3>
-                        <p>Join us as we exchange our vows and begin our journey as a married couple.</p>
-                    </div>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-time">15:00</div>
-                    <div class="schedule-event">
-                        <h3>Cocktail Hour</h3>
-                        <p>Enjoy drinks and canapes while we take photos. Mingle and celebrate!</p>
-                    </div>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-time">17:00</div>
-                    <div class="schedule-event">
-                        <h3>Reception & Dinner</h3>
-                        <p>Dinner will be served followed by speeches and toasts.</p>
-                    </div>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-time">19:00</div>
-                    <div class="schedule-event">
-                        <h3>First Dance & Party</h3>
-                        <p>Let's celebrate! Dancing and festivities continue into the night.</p>
-                    </div>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-time">23:00</div>
-                    <div class="schedule-event">
-                        <h3>Farewell</h3>
-                        <p>Thank you for celebrating with us!</p>
-                    </div>
-                </div>
+    <!-- Quick Links Section -->
+    <section class="quick-links-section">
+        <div class="container">
+            <div class="quick-links">
+                <a href="our-story.html" class="quick-link">
+                    <span class="quick-link-icon">&#9829;</span>
+                    <span class="quick-link-title">Our Story</span>
+                    <span class="quick-link-text">How we met and fell in love</span>
+                </a>
+                <a href="schedule.html" class="quick-link">
+                    <span class="quick-link-icon">&#9201;</span>
+                    <span class="quick-link-title">Schedule</span>
+                    <span class="quick-link-text">Wedding day timeline</span>
+                </a>
+                <a href="venue.html" class="quick-link">
+                    <span class="quick-link-icon">&#9962;</span>
+                    <span class="quick-link-title">Venue</span>
+                    <span class="quick-link-text">Location and directions</span>
+                </a>
+                <a href="faq.html" class="quick-link">
+                    <span class="quick-link-icon">?</span>
+                    <span class="quick-link-title">FAQ</span>
+                    <span class="quick-link-text">Common questions answered</span>
+                </a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Venue Section -->
-        <section class="venue-section" id="venue">
-            <h2 class="section-title">Venue & Directions</h2>
-            <div class="venue-content">
-                <div class="venue-info">
-                    <h3>Almost Orange</h3>
-                    <p class="venue-subtitle">Altyd Mooi Farm</p>
-                    <address>
-                        R513<br>
-                        Hartbeespoort, 0216<br>
-                        South Africa
-                    </address>
-                    <div class="venue-details">
-                        <div class="venue-detail">
-                            <strong>Parking</strong>
-                            <p>Free parking is available on site. Please follow the signs upon arrival.</p>
-                        </div>
-                        <div class="venue-detail">
-                            <strong>Getting There</strong>
-                            <p>The venue is located on the R513 between Hartbeespoort and Lanseria. Look for the Altyd Mooi Farm sign.</p>
-                        </div>
-                    </div>
-                    <a href="https://maps.google.com/?q=Almost+Orange+Hartbeespoort" target="_blank" rel="noopener" class="directions-btn">
-                        Get Directions
-                    </a>
-                </div>
-                <div class="venue-map">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.5!2d27.9!3d-25.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDQyJzAwLjAiUyAyN8KwNTQnMDAuMCJF!5e0!3m2!1sen!2sza!4v1234567890"
-                        width="100%"
-                        height="400"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        title="Venue Location">
-                    </iframe>
-                </div>
-            </div>
-        </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="couple-names">Vian & Stefan</p>
+        <p class="wedding-date">26 June 2026</p>
+    </footer>
 
-        <!-- FAQ Section -->
-        <section class="faq-section" id="faq">
-            <h2 class="section-title">Frequently Asked Questions</h2>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <button class="faq-question">
-                        What is the dress code?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Semi-formal / Smart casual. Ladies, please avoid stilettos as parts of the venue have grass. Gentlemen, a jacket is optional but collared shirts are appreciated.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Can I bring a plus one?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Due to venue capacity, we can only accommodate guests named on the invitation. If you received a plus one, it will be indicated on your invitation.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Are children welcome?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>While we love your little ones, we have chosen to make our wedding an adults-only celebration. We hope this gives you a chance to enjoy a night off!</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Is there parking available?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Yes! Free parking is available at the venue. Please follow the parking attendants' directions when you arrive.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        What if I have dietary restrictions?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Please let us know about any dietary requirements when you RSVP. We will do our best to accommodate all dietary needs.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Can I take photos during the ceremony?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Yes, absolutely! We would love for you to capture and share the special moments with us. Feel free to take photos throughout the day.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Where can I stay nearby?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>There are several accommodation options in Hartbeespoort. We recommend booking early as it's a popular area. Some options include guesthouses along the R513 and hotels in Hartbeespoort Dam area.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">
-                        When is the RSVP deadline?
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Please RSVP by May 15th, 2026. This helps us finalize catering and seating arrangements.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- RSVP Section -->
-        <section class="rsvp-section" id="rsvp">
-            <h2 class="section-title">RSVP</h2>
-            <p class="rsvp-deadline">Please respond by May 15th, 2026</p>
-
-            <form id="rsvp-form" class="rsvp-form">
-                <div class="form-group">
-                    <label for="name">Full Name *</label>
-                    <input type="text" id="name" name="name" required placeholder="Your full name">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required placeholder="your@email.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Your phone number">
-                </div>
-
-                <div class="form-group">
-                    <label>Will you be attending? *</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="attending" value="yes" required>
-                            <span>Joyfully Accept</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="attending" value="no">
-                            <span>Regretfully Decline</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group" id="guests-group">
-                    <label for="guests">Number of Guests (including yourself)</label>
-                    <select id="guests" name="guests">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="dietary-group">
-                    <label for="dietary">Dietary Requirements</label>
-                    <textarea id="dietary" name="dietary" placeholder="Please let us know of any allergies or dietary restrictions"></textarea>
-                </div>
-
-                <div class="form-group song-section" id="song-section">
-                    <label>Song Requests</label>
-                    <p class="song-description">Help us create the perfect playlist! Suggest up to 2 songs to get the party started.</p>
-
-                    <div class="song-input">
-                        <label for="song1">Song 1</label>
-                        <input type="text" id="song1" name="song1" placeholder="Song title - Artist">
-                    </div>
-
-                    <div class="song-input">
-                        <label for="song2">Song 2</label>
-                        <input type="text" id="song2" name="song2" placeholder="Song title - Artist">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Message for the Couple</label>
-                    <textarea id="message" name="message" placeholder="Share your wishes or a special message"></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    <span class="btn-text">Send RSVP</span>
-                    <span class="btn-loading" style="display: none;">Sending...</span>
-                </button>
-            </form>
-
-            <!-- Success Message -->
-            <div id="success-message" class="success-message" style="display: none;">
-                <div class="success-content">
-                    <svg class="checkmark" viewBox="0 0 52 52">
-                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                    </svg>
-                    <h3>Thank You!</h3>
-                    <p>Your RSVP has been received. We can't wait to celebrate with you!</p>
-                </div>
-            </div>
-
-            <!-- Decline Message -->
-            <div id="decline-message" class="decline-message" style="display: none;">
-                <div class="decline-content">
-                    <h3>We'll Miss You</h3>
-                    <p>Thank you for letting us know. You'll be in our thoughts on our special day.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p class="couple-names">Vian & Stefan</p>
-            <p class="wedding-date">26 June 2026</p>
-        </footer>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
