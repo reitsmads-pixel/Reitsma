@@ -69,6 +69,7 @@ function initRSVP() {
     checkDeadline();
     setupEventListeners();
     setupAttendingToggle();
+    setupGuestCountToggle();
 }
 
 // ================================
@@ -216,13 +217,47 @@ function setupEventListeners() {
  * Toggle guest/dietary/song sections based on attendance
  */
 function setupAttendingToggle() {
+    const additionalGuestsGroup = document.getElementById('additional-guests-group');
+
     attendingRadios.forEach(radio => {
         radio.addEventListener('change', function() {
             const isAttending = this.value === 'yes';
             guestsGroup.style.display = isAttending ? 'block' : 'none';
+            if (additionalGuestsGroup) {
+                // Only show additional guests if attending AND more than 1 guest selected
+                const guestCount = parseInt(document.getElementById('guests').value, 10);
+                additionalGuestsGroup.style.display = (isAttending && guestCount > 1) ? 'block' : 'none';
+            }
             dietaryGroup.style.display = isAttending ? 'block' : 'none';
             songSection.style.display = isAttending ? 'block' : 'none';
         });
+    });
+}
+
+/**
+ * Toggle additional guest name fields based on guest count
+ */
+function setupGuestCountToggle() {
+    const guestsSelect = document.getElementById('guests');
+    const additionalGuestsGroup = document.getElementById('additional-guests-group');
+    const guest2Container = document.getElementById('guest-2-container');
+    const guest3Container = document.getElementById('guest-3-container');
+
+    if (!guestsSelect || !additionalGuestsGroup) return;
+
+    guestsSelect.addEventListener('change', function() {
+        const count = parseInt(this.value, 10);
+
+        // Show/hide the additional guests section
+        additionalGuestsGroup.style.display = count > 1 ? 'block' : 'none';
+
+        // Show/hide individual guest name fields
+        if (guest2Container) {
+            guest2Container.style.display = count >= 2 ? 'block' : 'none';
+        }
+        if (guest3Container) {
+            guest3Container.style.display = count >= 3 ? 'block' : 'none';
+        }
     });
 }
 
@@ -285,6 +320,17 @@ function getFormData() {
         data.guests = parseInt(document.getElementById('guests').value, 10);
         data.dietary = document.getElementById('dietary').value.trim() || null;
         data.message = document.getElementById('message').value.trim() || null;
+
+        // Additional guest names
+        data.guestNames = [data.name]; // Start with primary guest
+        const guest2Input = document.getElementById('guest-2-name');
+        const guest3Input = document.getElementById('guest-3-name');
+        if (data.guests >= 2 && guest2Input && guest2Input.value.trim()) {
+            data.guestNames.push(guest2Input.value.trim());
+        }
+        if (data.guests >= 3 && guest3Input && guest3Input.value.trim()) {
+            data.guestNames.push(guest3Input.value.trim());
+        }
 
         // Song suggestions
         const song1 = document.getElementById('song1').value.trim();

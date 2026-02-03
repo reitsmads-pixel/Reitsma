@@ -19,9 +19,9 @@ cp faq.html dist/
 cp rsvp.html dist/
 cp styles.css dist/
 
-# Copy images folder (if any images exist)
-if [ -d "images" ] && [ "$(ls -A images 2>/dev/null)" ]; then
-    cp images/* dist/images/
+# Copy images folder (copy all files including hidden ones like .gitkeep)
+if [ -d "images" ]; then
+    cp -r images/. dist/images/ 2>/dev/null || true
 fi
 
 # Base64 encode the API key to bypass Netlify's secret scanner
