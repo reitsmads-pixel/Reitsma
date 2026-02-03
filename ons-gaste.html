@@ -279,11 +279,19 @@
             const noRsvps = document.getElementById('no-rsvps');
 
             loading.style.display = 'block';
+            loading.innerHTML = 'Loading RSVPs...';
             table.style.display = 'none';
             noRsvps.style.display = 'none';
 
             try {
-                const snapshot = await db.collection('rsvps').orderBy('submittedAt', 'desc').get();
+                // Try with orderBy first, fallback to simple get if index doesn't exist
+                let snapshot;
+                try {
+                    snapshot = await db.collection('rsvps').orderBy('submittedAt', 'desc').get();
+                } catch (orderError) {
+                    console.log('OrderBy failed, trying simple get:', orderError);
+                    snapshot = await db.collection('rsvps').get();
+                }
 
                 if (snapshot.empty) {
                     loading.style.display = 'none';
@@ -362,7 +370,16 @@
 
             } catch (error) {
                 console.error('Error loading RSVPs:', error);
-                loading.innerHTML = 'Error loading RSVPs. Please try again.';
+                loading.innerHTML = `
+                    <div style="color: var(--error);">
+                        <p><strong>Error loading RSVPs</strong></p>
+                        <p style="font-size: 0.85rem; margin-top: 10px;">
+                            ${error.code === 'permission-denied'
+                                ? 'Firestore rules are blocking access. Please check your Firebase security rules.'
+                                : error.message}
+                        </p>
+                    </div>
+                `;
             }
         }
 
