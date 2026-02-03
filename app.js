@@ -1,6 +1,6 @@
 /**
- * Vian & Stefan Wedding RSVP
- * Firebase Integration & Form Handling
+ * Vian & Stefan Wedding Website
+ * Firebase Integration, Countdown, FAQ & Form Handling
  */
 
 // Firebase Configuration - injected at build time (encoded to bypass secret scanner)
@@ -17,6 +17,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// Wedding Date
+const WEDDING_DATE = new Date('2026-06-26T14:00:00');
+const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
+
 // DOM Elements
 const rsvpForm = document.getElementById('rsvp-form');
 const successMessage = document.getElementById('success-message');
@@ -29,17 +33,124 @@ const dietaryGroup = document.getElementById('dietary-group');
 const songSection = document.getElementById('song-section');
 const attendingRadios = document.querySelectorAll('input[name="attending"]');
 
-// RSVP Deadline
-const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
-
 /**
  * Initialize the application
  */
 function init() {
+    initCountdown();
+    initNavigation();
+    initFAQ();
     checkDeadline();
     setupEventListeners();
     setupAttendingToggle();
 }
+
+// ================================
+// Countdown Timer
+// ================================
+
+function initCountdown() {
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown() {
+    const now = new Date();
+    const diff = WEDDING_DATE - now;
+
+    if (diff <= 0) {
+        document.getElementById('days').textContent = '0';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+}
+
+// ================================
+// Mobile Navigation
+// ================================
+
+function initNavigation() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const navHeight = document.querySelector('.nav').offsetHeight;
+                const targetPosition = target.offsetTop - navHeight;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// ================================
+// FAQ Accordion
+// ================================
+
+function initFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+
+            // Close all other items
+            faqItems.forEach(otherItem => {
+                otherItem.classList.remove('active');
+            });
+
+            // Toggle current item
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
+}
+
+// ================================
+// RSVP Form
+// ================================
 
 /**
  * Check if RSVP deadline has passed
@@ -60,7 +171,9 @@ function checkDeadline() {
  * Setup event listeners
  */
 function setupEventListeners() {
-    rsvpForm.addEventListener('submit', handleSubmit);
+    if (rsvpForm) {
+        rsvpForm.addEventListener('submit', handleSubmit);
+    }
 }
 
 /**

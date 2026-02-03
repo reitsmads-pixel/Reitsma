@@ -3,70 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vian & Stefan - Wedding RSVP</title>
+    <title>Vian & Stefan - Wedding</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">V & S</a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#our-story">Our Story</a></li>
+                <li><a href="#schedule">Schedule</a></li>
+                <li><a href="#venue">Venue</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#rsvp" class="nav-rsvp">RSVP</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
         <!-- Hero Section -->
-        <header class="hero">
+        <header class="hero" id="home">
             <p class="invitation-text">kindly join us for the wedding of</p>
             <h1 class="names">
                 <span class="name">VIAN</span>
                 <span class="and">and</span>
                 <span class="name">STEFAN</span>
             </h1>
+
+            <!-- Venue Illustration -->
+            <div class="venue-illustration">
+                <div class="illustration-placeholder">
+                    <svg viewBox="0 0 400 200" class="venue-sketch">
+                        <g stroke="#5a5a5a" fill="none" stroke-width="1">
+                            <rect x="120" y="80" width="160" height="100" />
+                            <rect x="140" y="100" width="30" height="40" />
+                            <rect x="230" y="100" width="30" height="40" />
+                            <path d="M120 80 L200 40 L280 80" />
+                            <path d="M170 180 L170 140 Q185 125 200 140 L200 180" />
+                            <path d="M200 180 L200 140 Q215 125 230 140 L230 180" />
+                            <rect x="150" y="55" width="20" height="15" />
+                            <line x1="160" y1="55" x2="160" y2="70" />
+                            <line x1="150" y1="62" x2="170" y2="62" />
+                            <ellipse cx="70" cy="140" rx="40" ry="50" />
+                            <ellipse cx="330" cy="130" rx="50" ry="60" />
+                            <ellipse cx="350" cy="150" rx="35" ry="40" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Event Details -->
+            <div class="details">
+                <div class="date-time">
+                    <span class="date">JUNE 26TH, 2026</span>
+                    <span class="separator">|</span>
+                    <span class="time">AT 14:00</span>
+                </div>
+                <address class="venue-address">
+                    <span class="venue-name">Almost Orange,</span>
+                    <span>Altyd Mooi Farm,</span>
+                    <span>R513, Hartbeespoort, 0216</span>
+                </address>
+                <p class="reception">reception to follow</p>
+            </div>
         </header>
 
-        <!-- Venue Illustration -->
-        <section class="venue-illustration">
-            <div class="illustration-placeholder">
-                <svg viewBox="0 0 400 200" class="venue-sketch">
-                    <!-- Simple house illustration -->
-                    <g stroke="#5a5a5a" fill="none" stroke-width="1">
-                        <!-- Main building -->
-                        <rect x="120" y="80" width="160" height="100" />
-                        <rect x="140" y="100" width="30" height="40" />
-                        <rect x="230" y="100" width="30" height="40" />
-                        <path d="M120 80 L200 40 L280 80" />
-                        <!-- Arches -->
-                        <path d="M170 180 L170 140 Q185 125 200 140 L200 180" />
-                        <path d="M200 180 L200 140 Q215 125 230 140 L230 180" />
-                        <!-- Windows -->
-                        <rect x="150" y="55" width="20" height="15" />
-                        <line x1="160" y1="55" x2="160" y2="70" />
-                        <line x1="150" y1="62" x2="170" y2="62" />
-                        <!-- Trees -->
-                        <ellipse cx="70" cy="140" rx="40" ry="50" />
-                        <ellipse cx="330" cy="130" rx="50" ry="60" />
-                        <ellipse cx="350" cy="150" rx="35" ry="40" />
-                    </g>
-                </svg>
+        <!-- Countdown Section -->
+        <section class="countdown-section" id="countdown">
+            <h2 class="section-subtitle">Counting Down To Our Day</h2>
+            <div class="countdown" id="countdown-timer">
+                <div class="countdown-item">
+                    <span class="countdown-value" id="days">000</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="hours">00</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="minutes">00</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="seconds">00</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
             </div>
         </section>
 
-        <!-- Event Details -->
-        <section class="details">
-            <div class="date-time">
-                <span class="date">JUNE 26TH</span>
-                <span class="separator">|</span>
-                <span class="time">AT 14:00</span>
+        <!-- Our Story Section -->
+        <section class="story-section" id="our-story">
+            <h2 class="section-title">Our Story</h2>
+            <div class="story-content">
+                <div class="story-timeline">
+                    <div class="story-item">
+                        <div class="story-date">How We Met</div>
+                        <div class="story-text">
+                            <p>Every love story has a beginning, and ours started when we least expected it. What began as a chance encounter soon blossomed into something beautiful.</p>
+                        </div>
+                    </div>
+                    <div class="story-item">
+                        <div class="story-date">First Date</div>
+                        <div class="story-text">
+                            <p>Our first date was filled with nervous laughter and endless conversation. We knew from that moment that this was the start of something special.</p>
+                        </div>
+                    </div>
+                    <div class="story-item">
+                        <div class="story-date">The Proposal</div>
+                        <div class="story-text">
+                            <p>With hearts full of love and hope for the future, we decided to take the next step in our journey together. And now, we can't wait to celebrate with you!</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <address class="venue">
-                <span class="venue-name">Almost Orange,</span>
-                <span>Altyd Mooi Farm,</span>
-                <span>R513,</span>
-                <span>Hartbeespoort, 0216</span>
-            </address>
-            <p class="reception">reception to follow</p>
+        </section>
+
+        <!-- Schedule Section -->
+        <section class="schedule-section" id="schedule">
+            <h2 class="section-title">Wedding Day Schedule</h2>
+            <div class="schedule-timeline">
+                <div class="schedule-item">
+                    <div class="schedule-time">13:30</div>
+                    <div class="schedule-event">
+                        <h3>Guest Arrival</h3>
+                        <p>Please arrive and find your seats. Light refreshments will be served.</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">14:00</div>
+                    <div class="schedule-event">
+                        <h3>Ceremony Begins</h3>
+                        <p>Join us as we exchange our vows and begin our journey as a married couple.</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">15:00</div>
+                    <div class="schedule-event">
+                        <h3>Cocktail Hour</h3>
+                        <p>Enjoy drinks and canapes while we take photos. Mingle and celebrate!</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">17:00</div>
+                    <div class="schedule-event">
+                        <h3>Reception & Dinner</h3>
+                        <p>Dinner will be served followed by speeches and toasts.</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:00</div>
+                    <div class="schedule-event">
+                        <h3>First Dance & Party</h3>
+                        <p>Let's celebrate! Dancing and festivities continue into the night.</p>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">23:00</div>
+                    <div class="schedule-event">
+                        <h3>Farewell</h3>
+                        <p>Thank you for celebrating with us!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Venue Section -->
+        <section class="venue-section" id="venue">
+            <h2 class="section-title">Venue & Directions</h2>
+            <div class="venue-content">
+                <div class="venue-info">
+                    <h3>Almost Orange</h3>
+                    <p class="venue-subtitle">Altyd Mooi Farm</p>
+                    <address>
+                        R513<br>
+                        Hartbeespoort, 0216<br>
+                        South Africa
+                    </address>
+                    <div class="venue-details">
+                        <div class="venue-detail">
+                            <strong>Parking</strong>
+                            <p>Free parking is available on site. Please follow the signs upon arrival.</p>
+                        </div>
+                        <div class="venue-detail">
+                            <strong>Getting There</strong>
+                            <p>The venue is located on the R513 between Hartbeespoort and Lanseria. Look for the Altyd Mooi Farm sign.</p>
+                        </div>
+                    </div>
+                    <a href="https://maps.google.com/?q=Almost+Orange+Hartbeespoort" target="_blank" rel="noopener" class="directions-btn">
+                        Get Directions
+                    </a>
+                </div>
+                <div class="venue-map">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.5!2d27.9!3d-25.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDQyJzAwLjAiUyAyN8KwNTQnMDAuMCJF!5e0!3m2!1sen!2sza!4v1234567890"
+                        width="100%"
+                        height="400"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        title="Venue Location">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What is the dress code?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Semi-formal / Smart casual. Ladies, please avoid stilettos as parts of the venue have grass. Gentlemen, a jacket is optional but collared shirts are appreciated.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I bring a plus one?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Due to venue capacity, we can only accommodate guests named on the invitation. If you received a plus one, it will be indicated on your invitation.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Are children welcome?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>While we love your little ones, we have chosen to make our wedding an adults-only celebration. We hope this gives you a chance to enjoy a night off!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is there parking available?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! Free parking is available at the venue. Please follow the parking attendants' directions when you arrive.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What if I have dietary restrictions?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Please let us know about any dietary requirements when you RSVP. We will do our best to accommodate all dietary needs.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I take photos during the ceremony?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We kindly ask that you keep your phones away during the ceremony so you can be fully present with us. Our photographer will capture all the special moments! Feel free to take photos during the reception.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Where can I stay nearby?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>There are several accommodation options in Hartbeespoort. We recommend booking early as it's a popular area. Some options include guesthouses along the R513 and hotels in Hartbeespoort Dam area.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        When is the RSVP deadline?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Please RSVP by May 15th, 2026. This helps us finalize catering and seating arrangements.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- RSVP Section -->
         <section class="rsvp-section" id="rsvp">
-            <h2>RSVP</h2>
+            <h2 class="section-title">RSVP</h2>
             <p class="rsvp-deadline">Please respond by May 15th, 2026</p>
 
             <form id="rsvp-form" class="rsvp-form">

@@ -1,5 +1,5 @@
 /* ================================
-   Vian & Stefan Wedding RSVP
+   Vian & Stefan Wedding Website
    Elegant, Minimalist Design
    ================================ */
 
@@ -35,9 +35,116 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 40px 20px;
+}
+
+/* ================================
+   Navigation
+   ================================ */
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(245, 242, 235, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-menu a {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--charcoal-light);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: var(--olive);
+}
+
+.nav-rsvp {
+    background-color: var(--olive);
+    color: var(--white) !important;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease !important;
+}
+
+.nav-rsvp:hover {
+    background-color: var(--olive-light);
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: var(--charcoal);
+    transition: transform 0.3s ease;
+}
+
+/* ================================
+   Section Titles
+   ================================ */
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-align: center;
+    color: var(--charcoal);
+    margin-bottom: 50px;
+}
+
+.section-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+    color: var(--charcoal-light);
+    margin-bottom: 30px;
 }
 
 /* ================================
@@ -46,7 +153,7 @@ body {
 
 .hero {
     text-align: center;
-    padding: 60px 20px;
+    padding: 120px 20px 60px;
 }
 
 .invitation-text {
@@ -133,7 +240,7 @@ body {
     color: var(--charcoal-light);
 }
 
-.venue {
+.venue-address {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1.2rem;
@@ -149,12 +256,332 @@ body {
 }
 
 .reception {
-    font-family: 'Dancing Script', 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1.8rem;
     color: var(--olive);
     margin-top: 40px;
     font-weight: 400;
+}
+
+/* ================================
+   Countdown Section
+   ================================ */
+
+.countdown-section {
+    padding: 60px 20px;
+    text-align: center;
+    background-color: var(--white);
+    border-radius: 8px;
+    margin: 40px 0;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.countdown-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: var(--olive);
+    line-height: 1;
+}
+
+.countdown-label {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--charcoal-light);
+    margin-top: 10px;
+}
+
+/* ================================
+   Our Story Section
+   ================================ */
+
+.story-section {
+    padding: 80px 20px;
+}
+
+.story-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.story-timeline {
+    position: relative;
+}
+
+.story-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--olive-light);
+    opacity: 0.5;
+}
+
+.story-item {
+    position: relative;
+    padding: 30px 0;
+    text-align: center;
+}
+
+.story-item::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 30px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--olive);
+    border-radius: 50%;
+    border: 3px solid var(--cream);
+}
+
+.story-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--olive);
+    margin-bottom: 15px;
+}
+
+.story-text {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.story-text p {
+    font-size: 1rem;
+    color: var(--charcoal-light);
+    line-height: 1.8;
+}
+
+/* ================================
+   Schedule Section
+   ================================ */
+
+.schedule-section {
+    padding: 80px 20px;
+    background-color: var(--white);
+    border-radius: 8px;
+    margin: 40px 0;
+}
+
+.schedule-timeline {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.schedule-item {
+    display: flex;
+    gap: 30px;
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.schedule-item:last-child {
+    border-bottom: none;
+}
+
+.schedule-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--olive);
+    min-width: 80px;
+}
+
+.schedule-event h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+}
+
+.schedule-event p {
+    font-size: 0.95rem;
+    color: var(--charcoal-light);
+    line-height: 1.6;
+}
+
+/* ================================
+   Venue Section
+   ================================ */
+
+.venue-section {
+    padding: 80px 20px;
+}
+
+.venue-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.venue-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 5px;
+}
+
+.venue-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--olive);
+    margin-bottom: 20px;
+}
+
+.venue-info address {
+    font-style: normal;
+    font-size: 1rem;
+    color: var(--charcoal-light);
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.venue-details {
+    margin-bottom: 25px;
+}
+
+.venue-detail {
+    margin-bottom: 20px;
+}
+
+.venue-detail strong {
+    display: block;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 5px;
+}
+
+.venue-detail p {
+    font-size: 0.95rem;
+    color: var(--charcoal-light);
+    line-height: 1.6;
+}
+
+.directions-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    background-color: var(--olive);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.directions-btn:hover {
+    background-color: var(--olive-light);
+}
+
+.venue-map {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.venue-map iframe {
+    display: block;
+}
+
+/* ================================
+   FAQ Section
+   ================================ */
+
+.faq-section {
+    padding: 80px 20px;
+    background-color: var(--white);
+    border-radius: 8px;
+    margin: 40px 0;
+}
+
+.faq-list {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: var(--olive);
+}
+
+.faq-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--olive);
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    padding-bottom: 20px;
+}
+
+.faq-answer p {
+    font-size: 0.95rem;
+    color: var(--charcoal-light);
+    line-height: 1.7;
 }
 
 /* ================================
@@ -164,19 +591,9 @@ body {
 .rsvp-section {
     background-color: var(--white);
     border-radius: 8px;
-    padding: 60px 40px;
-    margin: 60px 0;
+    padding: 80px 40px;
+    margin: 40px 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.rsvp-section h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.5rem;
-    font-weight: 400;
-    letter-spacing: 0.3em;
-    text-align: center;
-    color: var(--charcoal);
-    margin-bottom: 10px;
 }
 
 .rsvp-deadline {
@@ -464,13 +881,49 @@ body {
    Responsive Design
    ================================ */
 
+@media (max-width: 900px) {
+    .venue-content {
+        grid-template-columns: 1fr;
+    }
+
+    .venue-map {
+        order: -1;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 20px 15px;
     }
 
+    .nav-menu {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: var(--cream);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
     .hero {
-        padding: 40px 15px;
+        padding: 100px 15px 40px;
     }
 
     .name {
@@ -492,14 +945,40 @@ body {
         gap: 15px;
     }
 
+    .section-title {
+        font-size: 2rem;
+        letter-spacing: 0.15em;
+        margin-bottom: 40px;
+    }
+
+    .countdown-value {
+        font-size: 2.5rem;
+    }
+
+    .countdown {
+        gap: 20px;
+    }
+
+    .story-timeline::before {
+        display: none;
+    }
+
+    .story-item::before {
+        display: none;
+    }
+
+    .schedule-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .schedule-time {
+        font-size: 1.3rem;
+    }
+
     .rsvp-section {
         padding: 40px 25px;
         margin: 40px 0;
-    }
-
-    .rsvp-section h2 {
-        font-size: 2rem;
-        letter-spacing: 0.2em;
     }
 
     .radio-group {
@@ -509,6 +988,10 @@ body {
 
     .reception {
         font-size: 1.5rem;
+    }
+
+    .faq-question {
+        font-size: 1.1rem;
     }
 }
 
@@ -524,6 +1007,14 @@ body {
 
     .song-section {
         padding: 20px 15px;
+    }
+
+    .countdown-item {
+        min-width: 60px;
+    }
+
+    .countdown-value {
+        font-size: 2rem;
     }
 }
 
