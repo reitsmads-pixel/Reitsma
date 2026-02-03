@@ -1,0 +1,555 @@
+/* ================================
+   Vian & Stefan Wedding RSVP
+   Elegant, Minimalist Design
+   ================================ */
+
+:root {
+    --cream: #f5f2eb;
+    --cream-dark: #ebe7dc;
+    --olive: #7a8b6e;
+    --olive-light: #9aab8e;
+    --charcoal: #3a3a3a;
+    --charcoal-light: #5a5a5a;
+    --gold: #c4a86b;
+    --white: #ffffff;
+    --error: #c75050;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    background-color: var(--cream);
+    color: var(--charcoal);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* ================================
+   Hero Section
+   ================================ */
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.invitation-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--charcoal-light);
+    margin-bottom: 30px;
+    letter-spacing: 0.5px;
+}
+
+.names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    color: var(--charcoal);
+}
+
+.and {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--charcoal-light);
+    margin: 10px 0;
+}
+
+/* ================================
+   Venue Illustration
+   ================================ */
+
+.venue-illustration {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.illustration-placeholder {
+    width: 100%;
+    max-width: 500px;
+}
+
+.venue-sketch {
+    width: 100%;
+    height: auto;
+    opacity: 0.8;
+}
+
+/* ================================
+   Event Details
+   ================================ */
+
+.details {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.date-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.date, .time {
+    color: var(--charcoal);
+}
+
+.separator {
+    color: var(--charcoal-light);
+}
+
+.venue {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--olive);
+    line-height: 1.8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.venue-name {
+    font-weight: 500;
+}
+
+.reception {
+    font-family: 'Dancing Script', 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--olive);
+    margin-top: 40px;
+    font-weight: 400;
+}
+
+/* ================================
+   RSVP Section
+   ================================ */
+
+.rsvp-section {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 60px 40px;
+    margin: 60px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.rsvp-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-align: center;
+    color: var(--charcoal);
+    margin-bottom: 10px;
+}
+
+.rsvp-deadline {
+    text-align: center;
+    color: var(--charcoal-light);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+}
+
+.rsvp-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: var(--cream);
+    color: var(--charcoal);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--olive);
+    box-shadow: 0 0 0 3px rgba(122, 139, 110, 0.1);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+/* Radio Buttons */
+.radio-group {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.radio-label input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.3s ease;
+}
+
+.radio-label input[type="radio"]:checked {
+    border-color: var(--olive);
+}
+
+.radio-label input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: var(--olive);
+    border-radius: 50%;
+}
+
+/* Song Section */
+.song-section {
+    background-color: var(--cream);
+    padding: 25px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.song-description {
+    font-size: 0.9rem;
+    color: var(--charcoal-light);
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.song-input {
+    margin-bottom: 15px;
+}
+
+.song-input label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--charcoal-light);
+    margin-bottom: 5px;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.song-input input {
+    width: 100%;
+    padding: 12px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: var(--white);
+    color: var(--charcoal);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.song-input input:focus {
+    outline: none;
+    border-color: var(--olive);
+    box-shadow: 0 0 0 3px rgba(122, 139, 110, 0.1);
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 16px 32px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    background-color: var(--olive);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background-color: var(--olive-light);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Success & Decline Messages */
+.success-message,
+.decline-message {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.success-content,
+.decline-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.checkmark {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.checkmark-circle {
+    stroke: var(--olive);
+    stroke-width: 2;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+    stroke: var(--olive);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.success-message h3,
+.decline-message h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 15px;
+}
+
+.success-message p,
+.decline-message p {
+    color: var(--charcoal-light);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Error styles */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: var(--error);
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* ================================
+   Footer
+   ================================ */
+
+.footer {
+    text-align: center;
+    padding: 60px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.couple-names {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--charcoal);
+    margin-bottom: 10px;
+}
+
+.wedding-date {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--charcoal-light);
+}
+
+/* ================================
+   Responsive Design
+   ================================ */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    .hero {
+        padding: 40px 15px;
+    }
+
+    .name {
+        font-size: 2.8rem;
+        letter-spacing: 0.3em;
+    }
+
+    .and {
+        font-size: 1.5rem;
+    }
+
+    .invitation-text {
+        font-size: 1.2rem;
+    }
+
+    .date-time {
+        font-size: 1.2rem;
+        letter-spacing: 0.2em;
+        gap: 15px;
+    }
+
+    .rsvp-section {
+        padding: 40px 25px;
+        margin: 40px 0;
+    }
+
+    .rsvp-section h2 {
+        font-size: 2rem;
+        letter-spacing: 0.2em;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .reception {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .name {
+        font-size: 2.2rem;
+        letter-spacing: 0.2em;
+    }
+
+    .rsvp-section {
+        padding: 30px 20px;
+    }
+
+    .song-section {
+        padding: 20px 15px;
+    }
+}
+
+/* ================================
+   Hidden States
+   ================================ */
+
+.hidden {
+    display: none !important;
+}
+
+/* ================================
+   Animations
+   ================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
