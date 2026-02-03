@@ -37,4 +37,13 @@ sed -e "s|__FIREBASE_API_KEY_B64__|${FIREBASE_API_KEY_B64}|g" \
     -e "s|__FIREBASE_APP_ID__|${FIREBASE_APP_ID}|g" \
     app.js > dist/app.js
 
+# Replace environment variables in admin page
+sed -e "s|__FIREBASE_API_KEY_B64__|${FIREBASE_API_KEY_B64}|g" \
+    -e "s|__FIREBASE_AUTH_DOMAIN__|${FIREBASE_AUTH_DOMAIN}|g" \
+    -e "s|__FIREBASE_PROJECT_ID__|${FIREBASE_PROJECT_ID}|g" \
+    -e "s|__FIREBASE_STORAGE_BUCKET__|${FIREBASE_STORAGE_BUCKET}|g" \
+    -e "s|__FIREBASE_MESSAGING_SENDER_ID__|${FIREBASE_MESSAGING_SENDER_ID}|g" \
+    -e "s|__FIREBASE_APP_ID__|${FIREBASE_APP_ID}|g" \
+    ons-gaste.html > dist/ons-gaste.html
+
 echo "Build complete! Output in dist/"

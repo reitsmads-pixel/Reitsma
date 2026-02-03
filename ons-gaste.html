@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Guest List - Vian & Stefan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px 40px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+        }
+
+        .rsvp-table-container {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .rsvp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .rsvp-table th,
+        .rsvp-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rsvp-table th {
+            background: var(--cream);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+        }
+
+        .rsvp-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rsvp-table tr:hover td {
+            background: var(--cream);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-attending {
+            background: rgba(107, 124, 94, 0.15);
+            color: var(--accent);
+        }
+
+        .status-declined {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--error);
+        }
+
+        .guest-names {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .songs-list {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .no-rsvps {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .refresh-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: var(--accent-light);
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                gap: 20px;
+            }
+
+            .stat-card {
+                padding: 20px 30px;
+            }
+
+            .rsvp-table-container {
+                overflow-x: auto;
+            }
+
+            .rsvp-table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">V & S</a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="venue.html">Venue</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="rsvp.html" class="nav-rsvp">RSVP</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Guest List</h1>
+            <p>RSVP responses for your wedding</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-guests">-</div>
+                <div class="stat-label">Total Guests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="attending-count">-</div>
+                <div class="stat-label">Attending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="declined-count">-</div>
+                <div class="stat-label">Declined</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-headcount">-</div>
+                <div class="stat-label">Total Headcount</div>
+            </div>
+        </div>
+
+        <div class="rsvp-table-container">
+            <div class="loading" id="loading">Loading RSVPs...</div>
+            <table class="rsvp-table" id="rsvp-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Guests</th>
+                        <th>Guest Names</th>
+                        <th>Dietary</th>
+                        <th>Songs</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="rsvp-body">
+                </tbody>
+            </table>
+            <div class="no-rsvps" id="no-rsvps" style="display: none;">
+                <p>No RSVPs yet.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="refresh-btn" onclick="loadRSVPs()">Refresh List</button>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: atob("__FIREBASE_API_KEY_B64__"),
+            authDomain: "__FIREBASE_AUTH_DOMAIN__",
+            projectId: "__FIREBASE_PROJECT_ID__",
+            storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+            messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+            appId: "__FIREBASE_APP_ID__"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Load RSVPs on page load
+        document.addEventListener('DOMContentLoaded', loadRSVPs);
+
+        async function loadRSVPs() {
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('rsvp-table');
+            const tbody = document.getElementById('rsvp-body');
+            const noRsvps = document.getElementById('no-rsvps');
+
+            loading.style.display = 'block';
+            table.style.display = 'none';
+            noRsvps.style.display = 'none';
+
+            try {
+                const snapshot = await db.collection('rsvps').orderBy('submittedAt', 'desc').get();
+
+                if (snapshot.empty) {
+                    loading.style.display = 'none';
+                    noRsvps.style.display = 'block';
+                    updateStats(0, 0, 0, 0);
+                    return;
+                }
+
+                let totalResponses = 0;
+                let attendingCount = 0;
+                let declinedCount = 0;
+                let totalHeadcount = 0;
+
+                tbody.innerHTML = '';
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    totalResponses++;
+
+                    if (data.attending) {
+                        attendingCount++;
+                        totalHeadcount += data.guests || 1;
+                    } else {
+                        declinedCount++;
+                    }
+
+                    const row = document.createElement('tr');
+
+                    // Format date
+                    let dateStr = '-';
+                    if (data.submittedAt) {
+                        const date = data.submittedAt.toDate();
+                        dateStr = date.toLocaleDateString('en-ZA', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                        });
+                    } else if (data.submittedAtLocal) {
+                        const date = new Date(data.submittedAtLocal);
+                        dateStr = date.toLocaleDateString('en-ZA', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                        });
+                    }
+
+                    // Guest names
+                    let guestNamesStr = '-';
+                    if (data.guestNames && data.guestNames.length > 1) {
+                        guestNamesStr = data.guestNames.slice(1).join(', ');
+                    }
+
+                    // Songs
+                    let songsStr = '-';
+                    if (data.songSuggestions && data.songSuggestions.length > 0) {
+                        songsStr = data.songSuggestions.join(', ');
+                    }
+
+                    row.innerHTML = `
+                        <td><strong>${escapeHtml(data.name)}</strong><br><small style="color: var(--text-muted)">${escapeHtml(data.email)}</small></td>
+                        <td><span class="status-badge ${data.attending ? 'status-attending' : 'status-declined'}">${data.attending ? 'Attending' : 'Declined'}</span></td>
+                        <td>${data.attending ? (data.guests || 1) : '-'}</td>
+                        <td class="guest-names">${escapeHtml(guestNamesStr)}</td>
+                        <td>${data.dietary ? escapeHtml(data.dietary) : '-'}</td>
+                        <td class="songs-list">${escapeHtml(songsStr)}</td>
+                        <td>${data.message ? escapeHtml(data.message) : '-'}</td>
+                        <td>${dateStr}</td>
+                    `;
+
+                    tbody.appendChild(row);
+                });
+
+                loading.style.display = 'none';
+                table.style.display = 'table';
+                updateStats(totalResponses, attendingCount, declinedCount, totalHeadcount);
+
+            } catch (error) {
+                console.error('Error loading RSVPs:', error);
+                loading.innerHTML = 'Error loading RSVPs. Please try again.';
+            }
+        }
+
+        function updateStats(total, attending, declined, headcount) {
+            document.getElementById('total-guests').textContent = total;
+            document.getElementById('attending-count').textContent = attending;
+            document.getElementById('declined-count').textContent = declined;
+            document.getElementById('total-headcount').textContent = headcount;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Mobile nav toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>
