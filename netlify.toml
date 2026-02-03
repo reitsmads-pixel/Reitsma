@@ -1,0 +1,9 @@
+[build]
+  command = "bash build.sh"
+  publish = "dist"
+
+# Redirect all routes to index.html for SPA behavior (optional)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -3,14 +3,14 @@
  * Firebase Integration & Form Handling
  */
 
-// Firebase Configuration
+// Firebase Configuration - injected at build time
 const firebaseConfig = {
-    apiKey: "AIzaSyCLUMmwhfiZHRCI4kiSeUUtduatu5xM7Hg",
-    authDomain: "reitsma-ae8a3.firebaseapp.com",
-    projectId: "reitsma-ae8a3",
-    storageBucket: "reitsma-ae8a3.appspot.com",
-    messagingSenderId: "",
-    appId: ""
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "__FIREBASE_AUTH_DOMAIN__",
+    projectId: "__FIREBASE_PROJECT_ID__",
+    storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+    messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+    appId: "__FIREBASE_APP_ID__"
 };
 
 // Initialize Firebase
