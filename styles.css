@@ -25,6 +25,106 @@
     box-sizing: border-box;
 }
 
+/* ================================
+   PIN Lock Screen
+   ================================ */
+
+.lock-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #faf9f7 0%, #f0ebe3 100%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.lock-screen.unlocked {
+    display: none;
+}
+
+.lock-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+
+.lock-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+
+.pin-inputs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.pin-inputs input {
+    width: 55px;
+    height: 65px;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-text-security: disc;
+}
+
+.pin-inputs input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(107, 124, 94, 0.15);
+}
+
+.pin-inputs input.error {
+    border-color: var(--error);
+    animation: shake 0.4s ease;
+}
+
+.pin-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    min-height: 20px;
+    margin-bottom: 10px;
+}
+
+.pin-hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-8px); }
+}
+
+@media (max-width: 480px) {
+    .pin-inputs input {
+        width: 48px;
+        height: 58px;
+        font-size: 1.5rem;
+    }
+
+    .lock-logo {
+        font-size: 2.5rem;
+    }
+}
+
 html {
     scroll-behavior: smooth;
 }

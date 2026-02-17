@@ -26,6 +26,7 @@ let attendingRadios = null;
  * Initialize the application
  */
 function init() {
+    initPinLock();
     initCountdown();
     initNavigation();
     initFAQ();
@@ -34,6 +35,87 @@ function init() {
     // Only initialize RSVP functionality if we're on the RSVP page
     if (document.getElementById('rsvp-form')) {
         initRSVP();
+    }
+}
+
+// ================================
+// PIN Lock Screen
+// ================================
+
+const SITE_PIN = '2606';
+
+function initPinLock() {
+    const lockScreen = document.getElementById('lock-screen');
+    if (!lockScreen) return;
+
+    // Check if already unlocked this session
+    if (sessionStorage.getItem('site_unlocked') === 'true') {
+        lockScreen.classList.add('unlocked');
+        return;
+    }
+
+    const pinInputs = lockScreen.querySelectorAll('.pin-inputs input');
+    const pinError = document.getElementById('pin-error');
+
+    // Focus first input
+    pinInputs[0].focus();
+
+    pinInputs.forEach((input, index) => {
+        // Handle typing
+        input.addEventListener('input', (e) => {
+            const val = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = val;
+
+            if (val && index < pinInputs.length - 1) {
+                pinInputs[index + 1].focus();
+            }
+
+            // Check PIN when all 4 digits entered
+            if (index === pinInputs.length - 1 && val) {
+                const enteredPin = Array.from(pinInputs).map(i => i.value).join('');
+                if (enteredPin.length === 4) {
+                    checkPin(enteredPin, lockScreen, pinInputs, pinError);
+                }
+            }
+        });
+
+        // Handle backspace
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                pinInputs[index - 1].focus();
+                pinInputs[index - 1].value = '';
+            }
+        });
+
+        // Handle paste
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+            if (pasted.length >= 4) {
+                pinInputs.forEach((inp, i) => {
+                    inp.value = pasted[i] || '';
+                });
+                checkPin(pasted.substring(0, 4), lockScreen, pinInputs, pinError);
+            }
+        });
+    });
+}
+
+function checkPin(entered, lockScreen, pinInputs, pinError) {
+    if (entered === SITE_PIN) {
+        sessionStorage.setItem('site_unlocked', 'true');
+        lockScreen.classList.add('unlocked');
+    } else {
+        pinError.textContent = 'Incorrect PIN. Try again.';
+        pinInputs.forEach(input => {
+            input.classList.add('error');
+            input.value = '';
+        });
+        pinInputs[0].focus();
+
+        setTimeout(() => {
+            pinInputs.forEach(input => input.classList.remove('error'));
+        }, 500);
     }
 }
 
