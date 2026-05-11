@@ -4,7 +4,7 @@
  */
 
 // Wedding Date
-const WEDDING_DATE = new Date('2026-06-26T14:00:00');
+const WEDDING_DATE = new Date('2026-06-26T15:00:00');
 const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
 
 // Firebase (only initialized on RSVP page)
