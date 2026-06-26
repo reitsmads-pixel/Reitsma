@@ -128,23 +128,61 @@
             text-align: center;
             margin-top: 18px;
         }
+
+        .gallery-loading,
+        .gallery-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .guest-photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .guest-photo-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--cream);
+            aspect-ratio: 1;
+        }
+
+        .guest-photo-item img,
+        .guest-photo-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+        }
+
+        .guest-photo-item .download-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .guest-photo-item .download-btn:hover {
+            background: #fff;
+        }
     </style>
 </head>
 <body>
-    <!-- PIN Lock Screen -->
-    <div class="lock-screen" id="lock-screen">
-        <div class="lock-logo">V & S</div>
-        <p class="lock-subtitle">Enter PIN to continue</p>
-        <div class="pin-inputs">
-            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
-            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
-            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
-            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
-        </div>
-        <p class="pin-error" id="pin-error"></p>
-        <p class="pin-hint">Hint: Our special date</p>
-    </div>
-
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
@@ -213,11 +251,30 @@
         </div>
     </section>
 
+    <!-- Shared Photo Gallery -->
+    <section class="gallery-section" id="guest-gallery-section">
+        <div class="container">
+            <h2 class="section-title">Shared by Everyone</h2>
+            <p class="section-subtitle">Photos &amp; videos from our guests &mdash; tap to view, then download with the &#8681; button</p>
+            <div class="gallery-loading" id="gallery-loading">Loading photos...</div>
+            <div class="guest-photo-grid" id="guest-photo-grid" style="display: none;"></div>
+            <div class="gallery-empty" id="gallery-empty" style="display: none;">
+                <p>No photos yet &mdash; be the first to share one above!</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <p class="couple-names">Vian & Stefan</p>
         <p class="wedding-date">26 June 2026</p>
     </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Photo enlarged">
+    </div>
 
     <!-- Firebase SDK (used to record uploaded photos for the couple) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>

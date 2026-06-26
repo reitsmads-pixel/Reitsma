@@ -32,7 +32,6 @@ let attendingRadios = null;
  * Initialize the application
  */
 function init() {
-    initPinLock();
     initCountdown();
     initNavigation();
     initFAQ();
@@ -46,6 +45,11 @@ function init() {
     // Only initialize photo upload if we're on the Photos page
     if (document.getElementById('photo-upload-form')) {
         initPhotoUpload();
+    }
+
+    // Initialize the shared guest photo gallery on the Photos page
+    if (document.getElementById('guest-photo-grid')) {
+        initPhotoGallery();
     }
 }
 
@@ -632,6 +636,35 @@ function scrollToTop() {
 // Guest Photo Upload (Cloudinary)
 // ================================
 
+// Shared Firestore instance for the Photos page (used by both the upload
+// flow and the shared gallery). Initialized once on first use.
+let photoPageDb = null;
+let photoPageDbReady = false;
+// Set by initPhotoGallery so a new upload can refresh the gallery.
+let refreshGuestGallery = null;
+
+function ensurePhotosDb() {
+    if (photoPageDbReady) return photoPageDb;
+    photoPageDbReady = true;
+    try {
+        if (typeof firebase !== 'undefined' && firebase.firestore) {
+            const firebaseConfig = {
+                apiKey: atob("__FIREBASE_API_KEY_B64__"),
+                authDomain: "__FIREBASE_AUTH_DOMAIN__",
+                projectId: "__FIREBASE_PROJECT_ID__",
+                storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+                messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+                appId: "__FIREBASE_APP_ID__"
+            };
+            firebase.initializeApp(firebaseConfig);
+            photoPageDb = firebase.firestore();
+        }
+    } catch (err) {
+        console.warn('Firestore not available on photos page:', err);
+    }
+    return photoPageDb;
+}
+
 function initPhotoUpload() {
     const form = document.getElementById('photo-upload-form');
     const fileInput = document.getElementById('photo-input');
@@ -655,25 +688,9 @@ function initPhotoUpload() {
         return;
     }
 
-    // Optionally record uploads in Firestore so the couple can browse them later.
-    // Uploads still work even if this isn't available.
-    let photosDb = null;
-    try {
-        if (typeof firebase !== 'undefined' && firebase.firestore) {
-            const firebaseConfig = {
-                apiKey: atob("__FIREBASE_API_KEY_B64__"),
-                authDomain: "__FIREBASE_AUTH_DOMAIN__",
-                projectId: "__FIREBASE_PROJECT_ID__",
-                storageBucket: "__FIREBASE_STORAGE_BUCKET__",
-                messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
-                appId: "__FIREBASE_APP_ID__"
-            };
-            firebase.initializeApp(firebaseConfig);
-            photosDb = firebase.firestore();
-        }
-    } catch (err) {
-        console.warn('Firestore not available for photo logging:', err);
-    }
+    // Record uploads in Firestore so they show in the shared gallery and the
+    // couple can browse them later. Uploads still work even if this isn't available.
+    const photosDb = ensurePhotosDb();
 
     let selectedFiles = [];
 
@@ -760,6 +777,8 @@ function initPhotoUpload() {
 
         if (successUrls.length > 0) {
             showUploadSuccess(successUrls);
+            // Give Firestore a moment to register the new docs, then refresh
+            if (refreshGuestGallery) setTimeout(refreshGuestGallery, 1200);
         }
     });
 
@@ -854,6 +873,98 @@ function initPhotoUpload() {
         form.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+}
+
+// ================================
+// Shared Guest Photo Gallery
+// ================================
+
+function initPhotoGallery() {
+    const grid = document.getElementById('guest-photo-grid');
+    const loading = document.getElementById('gallery-loading');
+    const empty = document.getElementById('gallery-empty');
+    if (!grid) return;
+
+    const db = ensurePhotosDb();
+    if (!db) {
+        if (loading) loading.textContent = 'Gallery is unavailable right now.';
+        return;
+    }
+
+    async function loadGuestGallery() {
+        loading.style.display = 'block';
+        loading.textContent = 'Loading photos...';
+        grid.style.display = 'none';
+        empty.style.display = 'none';
+
+        try {
+            let snapshot;
+            try {
+                snapshot = await db.collection('photos').orderBy('uploadedAt', 'desc').get();
+            } catch (orderErr) {
+                snapshot = await db.collection('photos').get();
+            }
+
+            if (snapshot.empty) {
+                loading.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            grid.innerHTML = '';
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = lightbox ? lightbox.querySelector('img') : null;
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (!data.url) return;
+
+                const isVideo = data.resourceType === 'video';
+                const thumbUrl = isVideo
+                    ? data.url
+                    : data.url.replace('/upload/', '/upload/c_fill,w_400,h_400,q_auto,f_auto/');
+                const fullUrl = isVideo
+                    ? data.url
+                    : data.url.replace('/upload/', '/upload/q_auto,f_auto,w_1600/');
+                // fl_attachment forces the browser to download instead of opening
+                const downloadUrl = data.url.replace('/upload/', '/upload/fl_attachment/');
+
+                const item = document.createElement('div');
+                item.className = 'guest-photo-item';
+
+                const media = isVideo
+                    ? `<video src="${thumbUrl}" muted playsinline preload="metadata" controls></video>`
+                    : `<img src="${thumbUrl}" alt="Guest photo" loading="lazy">`;
+
+                item.innerHTML = `
+                    ${media}
+                    <a class="download-btn" href="${downloadUrl}" title="Download" aria-label="Download">&#8681;</a>
+                `;
+
+                if (!isVideo && lightbox && lightboxImg) {
+                    item.querySelector('img').addEventListener('click', () => {
+                        lightboxImg.src = fullUrl;
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    });
+                }
+
+                grid.appendChild(item);
+            });
+
+            loading.style.display = 'none';
+            grid.style.display = 'grid';
+        } catch (error) {
+            console.error('Error loading gallery:', error);
+            loading.textContent = error.code === 'permission-denied'
+                ? 'Gallery is not available yet.'
+                : 'Could not load photos right now.';
+        }
+    }
+
+    // Allow the upload flow to refresh the gallery after new uploads
+    refreshGuestGallery = loadGuestGallery;
+    loadGuestGallery();
 }
 
 function formatSize(bytes) {
