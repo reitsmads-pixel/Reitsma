@@ -7,6 +7,10 @@
 const WEDDING_DATE = new Date('2026-06-26T15:00:00');
 const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
 
+// Cloudinary (guest photo uploads) - injected at build time
+const CLOUDINARY_CLOUD_NAME = "__CLOUDINARY_CLOUD_NAME__";
+const CLOUDINARY_UPLOAD_PRESET = "__CLOUDINARY_UPLOAD_PRESET__";
+
 // Firebase (only initialized on RSVP page)
 let db = null;
 
@@ -35,6 +39,11 @@ function init() {
     // Only initialize RSVP functionality if we're on the RSVP page
     if (document.getElementById('rsvp-form')) {
         initRSVP();
+    }
+
+    // Only initialize photo upload if we're on the Photos page
+    if (document.getElementById('photo-upload-form')) {
+        initPhotoUpload();
     }
 }
 
@@ -615,6 +624,239 @@ function showDeclineMessage() {
  */
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ================================
+// Guest Photo Upload (Cloudinary)
+// ================================
+
+function initPhotoUpload() {
+    const form = document.getElementById('photo-upload-form');
+    const fileInput = document.getElementById('photo-input');
+    const dropzone = document.getElementById('dropzone');
+    const uploadList = document.getElementById('upload-list');
+    const uploadBtn = document.getElementById('upload-btn');
+    const btnText = uploadBtn.querySelector('.btn-text');
+    const btnLoading = uploadBtn.querySelector('.btn-loading');
+    const successMessage = document.getElementById('upload-success');
+    const uploadedGallery = document.getElementById('uploaded-gallery');
+    const uploadMoreBtn = document.getElementById('upload-more-btn');
+
+    // Bail with a friendly message if the build-time config wasn't injected
+    if (CLOUDINARY_CLOUD_NAME.indexOf('__') === 0 || CLOUDINARY_UPLOAD_PRESET.indexOf('__') === 0) {
+        form.innerHTML = `
+            <div class="deadline-passed">
+                <h3>Photo Upload Coming Soon</h3>
+                <p>This page isn't connected yet. Please check back a little later!</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Optionally record uploads in Firestore so the couple can browse them later.
+    // Uploads still work even if this isn't available.
+    let photosDb = null;
+    try {
+        if (typeof firebase !== 'undefined' && firebase.firestore) {
+            const firebaseConfig = {
+                apiKey: atob("__FIREBASE_API_KEY_B64__"),
+                authDomain: "__FIREBASE_AUTH_DOMAIN__",
+                projectId: "__FIREBASE_PROJECT_ID__",
+                storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+                messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+                appId: "__FIREBASE_APP_ID__"
+            };
+            firebase.initializeApp(firebaseConfig);
+            photosDb = firebase.firestore();
+        }
+    } catch (err) {
+        console.warn('Firestore not available for photo logging:', err);
+    }
+
+    let selectedFiles = [];
+
+    function refreshList() {
+        uploadList.innerHTML = '';
+        selectedFiles.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'upload-item';
+            row.id = `upload-item-${index}`;
+            row.innerHTML = `
+                <img class="thumb" alt="">
+                <div class="meta">
+                    <div class="file-name">${escapeHtml(item.file.name)}</div>
+                    <div class="progress-track"><div class="progress-fill"></div></div>
+                    <div class="status">${formatSize(item.file.size)}</div>
+                </div>
+            `;
+            uploadList.appendChild(row);
+
+            // Preview thumbnail for images
+            const thumb = row.querySelector('.thumb');
+            if (item.file.type.startsWith('image/')) {
+                thumb.src = URL.createObjectURL(item.file);
+            } else {
+                thumb.style.display = 'none';
+            }
+        });
+        uploadBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function addFiles(fileList) {
+        const incoming = Array.from(fileList).filter(f =>
+            f.type.startsWith('image/') || f.type.startsWith('video/')
+        );
+        incoming.forEach(file => selectedFiles.push({ file }));
+        refreshList();
+    }
+
+    fileInput.addEventListener('change', () => {
+        addFiles(fileInput.files);
+        fileInput.value = '';
+    });
+
+    // Drag & drop
+    ['dragover', 'dragenter'].forEach(evt =>
+        dropzone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        })
+    );
+    ['dragleave', 'dragend', 'drop'].forEach(evt =>
+        dropzone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+        })
+    );
+    dropzone.addEventListener('drop', (e) => {
+        if (e.dataTransfer && e.dataTransfer.files) {
+            addFiles(e.dataTransfer.files);
+        }
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (selectedFiles.length === 0) return;
+
+        const uploaderName = document.getElementById('uploader-name').value.trim() || 'Anonymous';
+        setUploading(true);
+
+        const successUrls = [];
+        for (let i = 0; i < selectedFiles.length; i++) {
+            try {
+                const result = await uploadOne(selectedFiles[i].file, i, uploaderName);
+                successUrls.push(result.secure_url);
+                markItem(i, 'done', 'Uploaded');
+                logPhoto(result, uploaderName);
+            } catch (err) {
+                console.error('Upload failed:', err);
+                markItem(i, 'failed', 'Failed - please try again');
+            }
+        }
+
+        setUploading(false);
+
+        if (successUrls.length > 0) {
+            showUploadSuccess(successUrls);
+        }
+    });
+
+    function uploadOne(file, index, uploaderName) {
+        return new Promise((resolve, reject) => {
+            const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+            formData.append('folder', 'wedding-guest-photos');
+            formData.append('tags', 'guest-upload');
+            formData.append('context', `uploader=${uploaderName}`);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url);
+
+            const fill = document.querySelector(`#upload-item-${index} .progress-fill`);
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable && fill) {
+                    fill.style.width = `${Math.round((event.loaded / event.total) * 100)}%`;
+                }
+            });
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    if (fill) fill.style.width = '100%';
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    reject(new Error(`HTTP ${xhr.status}: ${xhr.responseText}`));
+                }
+            };
+            xhr.onerror = () => reject(new Error('Network error'));
+            xhr.send(formData);
+        });
+    }
+
+    function logPhoto(result, uploaderName) {
+        if (!photosDb) return;
+        photosDb.collection('photos').add({
+            url: result.secure_url,
+            publicId: result.public_id,
+            resourceType: result.resource_type,
+            format: result.format || null,
+            uploadedBy: uploaderName,
+            uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uploadedAtLocal: new Date().toISOString()
+        }).catch(err => console.warn('Could not record photo:', err));
+    }
+
+    function markItem(index, state, statusText) {
+        const row = document.getElementById(`upload-item-${index}`);
+        if (!row) return;
+        row.classList.add(state);
+        const status = row.querySelector('.status');
+        if (status) status.textContent = statusText;
+    }
+
+    function setUploading(isUploading) {
+        uploadBtn.disabled = isUploading;
+        btnText.style.display = isUploading ? 'none' : 'inline';
+        btnLoading.style.display = isUploading ? 'inline' : 'none';
+    }
+
+    function showUploadSuccess(urls) {
+        uploadedGallery.innerHTML = '';
+        urls.forEach(url => {
+            const img = document.createElement('img');
+            // Cloudinary transformation for a light thumbnail
+            img.src = url.replace('/upload/', '/upload/c_fill,w_220,h_220,q_auto/');
+            img.alt = 'Uploaded photo';
+            uploadedGallery.appendChild(img);
+        });
+        form.style.display = 'none';
+        successMessage.style.display = 'block';
+        successMessage.classList.add('fade-in');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    uploadMoreBtn.addEventListener('click', () => {
+        selectedFiles = [];
+        uploadList.innerHTML = '';
+        uploadBtn.disabled = true;
+        successMessage.style.display = 'none';
+        form.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+function formatSize(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Initialize when DOM is ready
