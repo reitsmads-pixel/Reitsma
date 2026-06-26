@@ -752,7 +752,7 @@ function initPhotoUpload() {
                 logPhoto(result, uploaderName);
             } catch (err) {
                 console.error('Upload failed:', err);
-                markItem(i, 'failed', 'Failed - please try again');
+                markItem(i, 'failed', err.message || 'Failed - please try again');
             }
         }
 
@@ -788,7 +788,13 @@ function initPhotoUpload() {
                     if (fill) fill.style.width = '100%';
                     resolve(JSON.parse(xhr.responseText));
                 } else {
-                    reject(new Error(`HTTP ${xhr.status}: ${xhr.responseText}`));
+                    // Surface Cloudinary's actual error message so problems are easy to diagnose
+                    let msg = `Failed (HTTP ${xhr.status})`;
+                    try {
+                        const body = JSON.parse(xhr.responseText);
+                        if (body && body.error && body.error.message) msg = body.error.message;
+                    } catch (e) { /* keep generic message */ }
+                    reject(new Error(msg));
                 }
             };
             xhr.onerror = () => reject(new Error('Network error'));
