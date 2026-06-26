@@ -7,9 +7,11 @@
 const WEDDING_DATE = new Date('2026-06-26T15:00:00');
 const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
 
-// Cloudinary (guest photo uploads) - injected at build time
-const CLOUDINARY_CLOUD_NAME = "__CLOUDINARY_CLOUD_NAME__";
-const CLOUDINARY_UPLOAD_PRESET = "__CLOUDINARY_UPLOAD_PRESET__";
+// Cloudinary (guest photo uploads). These two values are public by design
+// (they appear in the upload request), so they are safe to keep in code.
+// Security comes from the preset being "unsigned" with limited permissions.
+const CLOUDINARY_CLOUD_NAME = "doel49cml";
+const CLOUDINARY_UPLOAD_PRESET = "gmmjpmui";
 
 // Firebase (only initialized on RSVP page)
 let db = null;
