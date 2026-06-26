@@ -7,9 +7,11 @@
 const WEDDING_DATE = new Date('2026-06-26T15:00:00');
 const RSVP_DEADLINE = new Date('2026-05-15T23:59:59');
 
-// Cloudinary (guest photo uploads) - injected at build time
-const CLOUDINARY_CLOUD_NAME = "__CLOUDINARY_CLOUD_NAME__";
-const CLOUDINARY_UPLOAD_PRESET = "__CLOUDINARY_UPLOAD_PRESET__";
+// Cloudinary (guest photo uploads). These two values are public by design
+// (they appear in the upload request), so they are safe to keep in code.
+// Security comes from the preset being "unsigned" with limited permissions.
+const CLOUDINARY_CLOUD_NAME = "doel49cml";
+const CLOUDINARY_UPLOAD_PRESET = "gmmjpmui";
 
 // Firebase (only initialized on RSVP page)
 let db = null;
@@ -750,7 +752,7 @@ function initPhotoUpload() {
                 logPhoto(result, uploaderName);
             } catch (err) {
                 console.error('Upload failed:', err);
-                markItem(i, 'failed', 'Failed - please try again');
+                markItem(i, 'failed', err.message || 'Failed - please try again');
             }
         }
 
@@ -767,9 +769,11 @@ function initPhotoUpload() {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-            formData.append('folder', 'wedding-guest-photos');
+            // Keep the request minimal. The unsigned preset already defines where
+            // uploads land (asset folder "V & S Wedding"); sending a conflicting
+            // folder/tags/context can get an unsigned upload rejected. The
+            // uploader's name is recorded in Firestore instead (see logPhoto).
             formData.append('tags', 'guest-upload');
-            formData.append('context', `uploader=${uploaderName}`);
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', url);
@@ -786,7 +790,13 @@ function initPhotoUpload() {
                     if (fill) fill.style.width = '100%';
                     resolve(JSON.parse(xhr.responseText));
                 } else {
-                    reject(new Error(`HTTP ${xhr.status}: ${xhr.responseText}`));
+                    // Surface Cloudinary's actual error message so problems are easy to diagnose
+                    let msg = `Failed (HTTP ${xhr.status})`;
+                    try {
+                        const body = JSON.parse(xhr.responseText);
+                        if (body && body.error && body.error.message) msg = body.error.message;
+                    } catch (e) { /* keep generic message */ }
+                    reject(new Error(msg));
                 }
             };
             xhr.onerror = () => reject(new Error('Network error'));
