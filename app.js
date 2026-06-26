@@ -769,9 +769,11 @@ function initPhotoUpload() {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-            formData.append('folder', 'wedding-guest-photos');
+            // Keep the request minimal. The unsigned preset already defines where
+            // uploads land (asset folder "V & S Wedding"); sending a conflicting
+            // folder/tags/context can get an unsigned upload rejected. The
+            // uploader's name is recorded in Firestore instead (see logPhoto).
             formData.append('tags', 'guest-upload');
-            formData.append('context', `uploader=${uploaderName}`);
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', url);
