@@ -157,6 +157,50 @@
             background: var(--accent-light);
         }
 
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--cream);
+            border: 1px solid var(--border);
+        }
+
+        .photo-card img,
+        .photo-card video {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-card .photo-meta {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 8px 10px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+            color: #fff;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .photo-card .photo-meta a {
+            color: #fff;
+            text-decoration: underline;
+            white-space: nowrap;
+        }
+
         @media (max-width: 768px) {
             .stats {
                 gap: 20px;
@@ -206,6 +250,7 @@
                 <li><a href="schedule.html">Schedule</a></li>
                 <li><a href="venue.html">Venue</a></li>
                 <li><a href="faq.html">FAQ</a></li>
+                <li><a href="photos.html">Photos</a></li>
                 <li><a href="rsvp.html" class="nav-rsvp">RSVP</a></li>
             </ul>
         </div>
@@ -261,6 +306,23 @@
 
         <div style="text-align: center; margin-top: 30px;">
             <button class="refresh-btn" onclick="loadRSVPs()">Refresh List</button>
+        </div>
+
+        <div class="admin-header" style="margin-top: 70px;">
+            <h1>Guest Photos</h1>
+            <p>Photos &amp; videos shared by your guests</p>
+        </div>
+
+        <div class="rsvp-table-container" style="padding: 25px;">
+            <div class="loading" id="photos-loading">Loading photos...</div>
+            <div class="photo-gallery" id="photo-gallery" style="display: none;"></div>
+            <div class="no-rsvps" id="no-photos" style="display: none;">
+                <p>No photos uploaded yet.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="refresh-btn" onclick="loadPhotos()">Refresh Photos</button>
         </div>
     </div>
 
@@ -333,6 +395,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initPinLock();
             loadRSVPs();
+            loadPhotos();
         });
 
         async function loadRSVPs() {
@@ -439,6 +502,75 @@
                         <p style="font-size: 0.85rem; margin-top: 10px;">
                             ${error.code === 'permission-denied'
                                 ? 'Firestore rules are blocking access. Please check your Firebase security rules.'
+                                : error.message}
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadPhotos() {
+            const loading = document.getElementById('photos-loading');
+            const gallery = document.getElementById('photo-gallery');
+            const noPhotos = document.getElementById('no-photos');
+
+            loading.style.display = 'block';
+            loading.innerHTML = 'Loading photos...';
+            gallery.style.display = 'none';
+            noPhotos.style.display = 'none';
+
+            try {
+                let snapshot;
+                try {
+                    snapshot = await db.collection('photos').orderBy('uploadedAt', 'desc').get();
+                } catch (orderError) {
+                    snapshot = await db.collection('photos').get();
+                }
+
+                if (snapshot.empty) {
+                    loading.style.display = 'none';
+                    noPhotos.style.display = 'block';
+                    return;
+                }
+
+                gallery.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (!data.url) return;
+
+                    const card = document.createElement('div');
+                    card.className = 'photo-card';
+
+                    const isVideo = data.resourceType === 'video';
+                    const thumb = isVideo
+                        ? data.url
+                        : data.url.replace('/upload/', '/upload/c_fill,w_300,h_300,q_auto/');
+
+                    const media = isVideo
+                        ? `<video src="${thumb}" muted preload="metadata"></video>`
+                        : `<img src="${thumb}" alt="Guest photo" loading="lazy">`;
+
+                    card.innerHTML = `
+                        ${media}
+                        <div class="photo-meta">
+                            <span>${escapeHtml(data.uploadedBy || 'Anonymous')}</span>
+                            <a href="${data.url}" target="_blank" rel="noopener" download>Download</a>
+                        </div>
+                    `;
+                    gallery.appendChild(card);
+                });
+
+                loading.style.display = 'none';
+                gallery.style.display = 'grid';
+
+            } catch (error) {
+                console.error('Error loading photos:', error);
+                loading.innerHTML = `
+                    <div style="color: var(--error);">
+                        <p><strong>Error loading photos</strong></p>
+                        <p style="font-size: 0.85rem; margin-top: 10px;">
+                            ${error.code === 'permission-denied'
+                                ? 'Firestore rules are blocking access to the photos collection.'
                                 : error.message}
                         </p>
                     </div>

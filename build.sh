@@ -17,6 +17,7 @@ cp schedule.html dist/
 cp venue.html dist/
 cp faq.html dist/
 cp rsvp.html dist/
+cp photos.html dist/
 cp styles.css dist/
 
 # Copy images folder (copy all files including hidden ones like .gitkeep)
@@ -35,6 +36,8 @@ sed -e "s|__FIREBASE_API_KEY_B64__|${FIREBASE_API_KEY_B64}|g" \
     -e "s|__FIREBASE_STORAGE_BUCKET__|${FIREBASE_STORAGE_BUCKET}|g" \
     -e "s|__FIREBASE_MESSAGING_SENDER_ID__|${FIREBASE_MESSAGING_SENDER_ID}|g" \
     -e "s|__FIREBASE_APP_ID__|${FIREBASE_APP_ID}|g" \
+    -e "s|__CLOUDINARY_CLOUD_NAME__|${CLOUDINARY_CLOUD_NAME}|g" \
+    -e "s|__CLOUDINARY_UPLOAD_PRESET__|${CLOUDINARY_UPLOAD_PRESET}|g" \
     app.js > dist/app.js
 
 # Replace environment variables in admin page

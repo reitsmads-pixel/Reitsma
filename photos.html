@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Photos - Vian & Stefan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .upload-dropzone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 45px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background 0.3s ease;
+            background: var(--white);
+        }
+
+        .upload-dropzone:hover,
+        .upload-dropzone.dragover {
+            border-color: var(--accent);
+            background: var(--cream);
+        }
+
+        .upload-dropzone .upload-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .upload-dropzone .upload-main {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-top: 12px;
+        }
+
+        .upload-dropzone .upload-sub {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+
+        .upload-list {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .upload-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+        }
+
+        .upload-item .thumb {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--cream);
+        }
+
+        .upload-item .meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .upload-item .file-name {
+            font-size: 0.85rem;
+            color: var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .progress-track {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--cream);
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.2s ease;
+        }
+
+        .upload-item .status {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            color: var(--text-light);
+        }
+
+        .upload-item.done .status { color: var(--accent); }
+        .upload-item.failed .status { color: var(--error); }
+        .upload-item.failed .progress-fill { background: var(--error); }
+
+        .uploaded-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .uploaded-gallery img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .upload-note {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- PIN Lock Screen -->
+    <div class="lock-screen" id="lock-screen">
+        <div class="lock-logo">V & S</div>
+        <p class="lock-subtitle">Enter PIN to continue</p>
+        <div class="pin-inputs">
+            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
+            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
+            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
+            <input type="tel" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off">
+        </div>
+        <p class="pin-error" id="pin-error"></p>
+        <p class="pin-hint">Hint: Our special date</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">V & S</a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="venue.html">Venue</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="photos.html" class="active">Photos</a></li>
+                <li><a href="rsvp.html" class="nav-rsvp">RSVP</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Photo Upload Section -->
+    <section class="rsvp-section rsvp-page">
+        <div class="container">
+            <h1 class="section-title">Share Your Photos</h1>
+            <p class="rsvp-deadline">Help us relive the day &mdash; upload the photos &amp; videos you captured</p>
+
+            <form id="photo-upload-form" class="rsvp-form">
+                <div class="form-group">
+                    <label for="uploader-name">Your Name (optional)</label>
+                    <input type="text" id="uploader-name" name="uploader-name" placeholder="So we know who to thank!">
+                </div>
+
+                <div class="form-group">
+                    <label class="upload-dropzone" id="dropzone" for="photo-input">
+                        <span class="upload-icon">&#128247;</span>
+                        <span class="upload-main">Tap to choose photos &amp; videos</span>
+                        <span class="upload-sub">or drag them here &middot; you can select many at once</span>
+                    </label>
+                    <input type="file" id="photo-input" accept="image/*,video/*" multiple style="display: none;">
+                </div>
+
+                <div class="upload-list" id="upload-list"></div>
+
+                <button type="submit" class="submit-btn" id="upload-btn" disabled>
+                    <span class="btn-text">Upload Photos</span>
+                    <span class="btn-loading" style="display: none;">Uploading...</span>
+                </button>
+            </form>
+
+            <!-- Success Message -->
+            <div id="upload-success" class="success-message" style="display: none;">
+                <div class="success-content">
+                    <svg class="checkmark" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                    <h3>Thank You!</h3>
+                    <p>Your photos are now part of our memories. We can't wait to look through them!</p>
+                    <div class="uploaded-gallery" id="uploaded-gallery"></div>
+                    <p class="upload-note">
+                        <button type="button" class="refresh-btn" id="upload-more-btn" style="margin-top: 18px;">Upload More</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="couple-names">Vian & Stefan</p>
+        <p class="wedding-date">26 June 2026</p>
+    </footer>
+
+    <!-- Firebase SDK (used to record uploaded photos for the couple) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
