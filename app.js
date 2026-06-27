@@ -763,7 +763,13 @@ function initPhotoUpload() {
         const successUrls = [];
         for (let i = 0; i < selectedFiles.length; i++) {
             try {
-                const result = await uploadOne(selectedFiles[i].file, i, uploaderName);
+                let fileToUpload = selectedFiles[i].file;
+                if (fileToUpload.size > 9.5 * 1024 * 1024) {
+                    const statusEl = document.querySelector(`#upload-item-${i} .status`);
+                    if (statusEl) statusEl.textContent = 'Optimizing photo…';
+                }
+                fileToUpload = await compressImageIfNeeded(fileToUpload);
+                const result = await uploadOne(fileToUpload, i, uploaderName);
                 successUrls.push(result.secure_url);
                 markItem(i, 'done', 'Uploaded');
                 logPhoto(result, uploaderName);
@@ -965,6 +971,88 @@ function initPhotoGallery() {
     // Allow the upload flow to refresh the gallery after new uploads
     refreshGuestGallery = loadGuestGallery;
     loadGuestGallery();
+}
+
+// ================================
+// Client-side image compression
+// ================================
+// Cloudinary's free plan rejects images larger than 10 MB. To avoid an
+// upgrade, downscale/recompress only the oversized images in the browser
+// before upload. Smaller images and videos are passed through untouched.
+
+const UPLOAD_MAX_BYTES = 9.5 * 1024 * 1024; // safely under Cloudinary's 10 MB
+
+async function compressImageIfNeeded(file) {
+    if (!file.type || !file.type.startsWith('image/')) return file; // leave videos alone
+    if (file.size <= UPLOAD_MAX_BYTES) return file;                 // already small enough
+
+    let source;
+    try {
+        source = await loadImageSource(file);
+    } catch (e) {
+        console.warn('Could not decode image for compression, uploading original:', e);
+        return file;
+    }
+
+    // Try progressively smaller dimensions / quality until under the limit
+    const attempts = [
+        { maxDim: 3000, quality: 0.85 },
+        { maxDim: 2400, quality: 0.82 },
+        { maxDim: 2000, quality: 0.80 },
+        { maxDim: 1600, quality: 0.75 }
+    ];
+
+    let smallest = null;
+    for (const a of attempts) {
+        const blob = await drawToJpegBlob(source, a.maxDim, a.quality);
+        if (!blob) continue;
+        if (!smallest || blob.size < smallest.size) smallest = blob;
+        if (blob.size <= UPLOAD_MAX_BYTES) break;
+    }
+    if (source.close) source.close();
+
+    if (smallest && smallest.size < file.size) {
+        const name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        return new File([smallest], name, { type: 'image/jpeg' });
+    }
+    return file;
+}
+
+function loadImageSource(file) {
+    return new Promise((resolve, reject) => {
+        if (window.createImageBitmap) {
+            // imageOrientation keeps phone photos the right way up
+            window.createImageBitmap(file, { imageOrientation: 'from-image' })
+                .then(resolve)
+                .catch(() => window.createImageBitmap(file).then(resolve).catch(() => loadViaImg(file).then(resolve, reject)));
+        } else {
+            loadViaImg(file).then(resolve, reject);
+        }
+    });
+}
+
+function loadViaImg(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+        img.src = url;
+    });
+}
+
+function drawToJpegBlob(source, maxDim, quality) {
+    const w = source.width;
+    const h = source.height;
+    const scale = Math.min(1, maxDim / Math.max(w, h));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+    return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
+    });
 }
 
 function formatSize(bytes) {
