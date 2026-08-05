@@ -32,6 +32,7 @@ let attendingRadios = null;
  * Initialize the application
  */
 function init() {
+    initPinLock();
     initCountdown();
     initNavigation();
     initFAQ();
