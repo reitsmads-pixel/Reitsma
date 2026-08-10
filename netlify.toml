@@ -2,6 +2,13 @@
   command = "bash build.sh"
   publish = "dist"
 
+# Tell search engines not to index or follow anything on this site.
+# The header covers every response (pages, images, scripts), not just HTML.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # Redirect all routes to index.html for SPA behavior (optional)
 [[redirects]]
   from = "/*"
